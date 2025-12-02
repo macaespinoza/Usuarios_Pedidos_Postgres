@@ -7,7 +7,9 @@ const { Usuario, Pedido } = require('../models')
 router.get('/', async (req, res) => {
   try {
     const usuarios = await Usuario.findAll()
-    res.render('usuarios/index', { usuarios })
+    // Convertir objetos Sequelize a JSON plano
+    const usuariosJSON = usuarios.map(u => u.toJSON())
+    res.render('usuarios/index', { usuarios: usuariosJSON })
   } catch (error) {
     res.status(500).send('Error al cargar usuarios')
   }
@@ -29,9 +31,13 @@ router.get('/:id/pedidos', async (req, res) => {
       return res.status(404).send('Usuario no encontrado')
     }
 
+    // Convertir objetos Sequelize a JSON plano
+    const usuarioJSON = usuario.toJSON()
+    const pedidosJSON = usuario.pedidos.map(p => p.toJSON())
+
     res.render('usuarios/pedidos', {
-      usuario: usuario.toJSON(),
-      pedidos: usuario.pedidos
+      usuario: usuarioJSON,
+      pedidos: pedidosJSON
     })
   } catch (error) {
     res.status(500).send('Error al cargar pedidos')

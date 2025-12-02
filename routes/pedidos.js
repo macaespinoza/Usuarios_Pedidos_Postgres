@@ -14,7 +14,9 @@ router.get('/', async (req, res) => {
         attributes: ['id', 'nombre', 'email']
       }
     })
-    res.render('pedidos/index', { pedidos })
+    // Convertir objetos Sequelize a JSON plano
+    const pedidosJSON = pedidos.map(p => p.toJSON())
+    res.render('pedidos/index', { pedidos: pedidosJSON })
   } catch (error) {
     res.status(500).send('Error al cargar pedidos')
   }
