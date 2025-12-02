@@ -1,6 +1,6 @@
-# Tienda Online API
+# Tienda Online
 
-API REST para gestionar usuarios y pedidos con Node.js, Express, Sequelize y PostgreSQL.
+Aplicación web para gestionar usuarios y pedidos con Node.js, Express, Sequelize, PostgreSQL, Handlebars y Bootstrap (modo dark).
 
 ## Requisitos
 
@@ -36,30 +36,45 @@ PORT=3000
 npm start
 ```
 
-## Endpoints
+## Interfaz Web
+
+La aplicación incluye una interfaz web completa con Bootstrap en modo dark:
+
+- **`/`** - Página principal con acceso a usuarios y pedidos
+- **`/usuarios`** - Lista de usuarios con opciones para crear, editar y eliminar
+- **`/usuarios/:id/pedidos`** - Ver pedidos de un usuario específico
+- **`/pedidos`** - Lista de todos los pedidos con opción para crear nuevos
+
+Todas las vistas utilizan Bootstrap 5.3.2 en modo dark con Handlebars como motor de plantillas.
+
+## API REST - Endpoints
 
 ### Usuarios
 
-| Método | Ruta | Descripción |
-|--------|------|-------------|
-| POST | /usuarios | Crear usuario |
-| GET | /usuarios | Obtener todos los usuarios |
-| PUT | /usuarios/:id | Actualizar usuario |
-| DELETE | /usuarios/:id | Eliminar usuario |
-| GET | /usuarios/:id/pedidos | Obtener pedidos de un usuario |
+| Método | Ruta | Descripción | Tipo |
+|--------|------|-------------|------|
+| GET | /usuarios | Ver lista de usuarios | Vista HTML |
+| GET | /usuarios/:id/pedidos | Ver pedidos de un usuario | Vista HTML |
+| POST | /usuarios/api | Crear usuario | JSON |
+| PUT | /usuarios/api/:id | Actualizar usuario | JSON |
+| DELETE | /usuarios/api/:id | Eliminar usuario | JSON |
+| GET | /usuarios/api/:id/pedidos | Obtener pedidos de un usuario | JSON |
 
 ### Pedidos
 
-| Método | Ruta | Descripción |
-|--------|------|-------------|
-| POST | /pedidos | Crear pedido |
-| GET | /pedidos | Obtener todos los pedidos |
+| Método | Ruta | Descripción | Tipo |
+|--------|------|-------------|------|
+| GET | /pedidos | Ver lista de pedidos | Vista HTML |
+| POST | /pedidos/api | Crear pedido | JSON |
+| GET | /pedidos/api | Obtener todos los pedidos | JSON |
 
-## Ejemplos de uso con Postman
+## Ejemplos de uso con la API
 
 ### Crear usuario
-```json
-POST /usuarios
+```bash
+POST /usuarios/api
+Content-Type: application/json
+
 {
   "nombre": "Ana Torres",
   "email": "ana@email.com",
@@ -68,11 +83,29 @@ POST /usuarios
 ```
 
 ### Crear pedido
-```json
-POST /pedidos
+```bash
+POST /pedidos/api
+Content-Type: application/json
+
 {
   "usuario_id": 1,
   "producto": "Auriculares",
   "cantidad": 2
 }
+```
+
+### Actualizar usuario
+```bash
+PUT /usuarios/api/1
+Content-Type: application/json
+
+{
+  "nombre": "Ana Torres Actualizado",
+  "email": "ana.torres@email.com"
+}
+```
+
+### Eliminar usuario
+```bash
+DELETE /usuarios/api/1
 ```
