@@ -1,0 +1,121 @@
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="display-4">Usuarios</h1>
+        <p class="lead">Gestiona los usuarios de la tienda</p>
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevoUsuarioModal">
+            <i class="bi bi-plus-circle"></i> Nuevo Usuario
+        </button>
+    </div>
+</div>
+
+{{#if usuarios.length}}
+<div class="table-responsive">
+    <table class="table table-dark table-striped table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Fecha de Creación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each usuarios}}
+            <tr>
+                <td>{{this.id}}</td>
+                <td>{{this.nombre}}</td>
+                <td>{{this.email}}</td>
+                <td>{{this.createdAt}}</td>
+                <td>
+                    <a href="/usuarios/{{this.id}}/pedidos" class="btn btn-sm btn-info">Ver Pedidos</a>
+                    <button class="btn btn-sm btn-warning" onclick="editarUsuario({{this.id}})">Editar</button>
+                    <button class="btn btn-sm btn-danger" onclick="eliminarUsuario({{this.id}})">Eliminar</button>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+{{else}}
+<div class="alert alert-info">
+    <h4 class="alert-heading">No hay usuarios registrados</h4>
+    <p>Comienza agregando un nuevo usuario usando el botón "Nuevo Usuario".</p>
+</div>
+{{/if}}
+
+<!-- Modal Nuevo Usuario -->
+<div class="modal fade" id="nuevoUsuarioModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title">Nuevo Usuario</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formNuevoUsuario">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="contraseña" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="contraseña" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="crearUsuario()">Crear Usuario</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function crearUsuario() {
+        const nombre = document.getElementById('nombre').value;
+        const email = document.getElementById('email').value;
+        const contraseña = document.getElementById('contraseña').value;
+
+        try {
+            const response = await fetch('/usuarios/api', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nombre, email, contraseña })
+            });
+
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Error al crear usuario');
+            }
+        } catch (error) {
+            alert('Error: ' + error.message);
+        }
+    }
+
+    async function eliminarUsuario(id) {
+        if (confirm('¿Estás seguro de eliminar este usuario?')) {
+            try {
+                const response = await fetch(`/usuarios/api/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('Error al eliminar usuario');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+    }
+</script>

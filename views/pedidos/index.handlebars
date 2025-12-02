@@ -1,0 +1,102 @@
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="display-4">Pedidos</h1>
+        <p class="lead">Gestiona todos los pedidos de la tienda</p>
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevoPedidoModal">
+            <i class="bi bi-plus-circle"></i> Nuevo Pedido
+        </button>
+    </div>
+</div>
+
+{{#if pedidos.length}}
+<div class="table-responsive">
+    <table class="table table-dark table-striped table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Email</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each pedidos}}
+            <tr>
+                <td>{{this.id}}</td>
+                <td>{{this.usuario.nombre}}</td>
+                <td>{{this.usuario.email}}</td>
+                <td>{{this.producto}}</td>
+                <td>{{this.cantidad}}</td>
+                <td>{{this.createdAt}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+{{else}}
+<div class="alert alert-info">
+    <h4 class="alert-heading">No hay pedidos registrados</h4>
+    <p>Comienza agregando un nuevo pedido usando el botón "Nuevo Pedido".</p>
+</div>
+{{/if}}
+
+<!-- Modal Nuevo Pedido -->
+<div class="modal fade" id="nuevoPedidoModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title">Nuevo Pedido</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formNuevoPedido">
+                    <div class="mb-3">
+                        <label for="usuario_id" class="form-label">Usuario ID</label>
+                        <input type="number" class="form-control" id="usuario_id" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="producto" class="form-label">Producto</label>
+                        <input type="text" class="form-control" id="producto" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cantidad" class="form-label">Cantidad</label>
+                        <input type="number" class="form-control" id="cantidad" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="crearPedido()">Crear Pedido</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function crearPedido() {
+        const usuario_id = document.getElementById('usuario_id').value;
+        const producto = document.getElementById('producto').value;
+        const cantidad = document.getElementById('cantidad').value;
+
+        try {
+            const response = await fetch('/pedidos/api', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ usuario_id, producto, cantidad })
+            });
+
+            if (response.ok) {
+                location.reload();
+            } else {
+                const error = await response.json();
+                alert('Error al crear pedido: ' + error.error);
+            }
+        } catch (error) {
+            alert('Error: ' + error.message);
+        }
+    }
+</script>

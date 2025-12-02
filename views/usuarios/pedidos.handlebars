@@ -1,0 +1,33 @@
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="display-4">Pedidos de {{usuario.nombre}}</h1>
+        <p class="lead">Email: {{usuario.email}}</p>
+    </div>
+    <div class="col-auto">
+        <a href="/usuarios" class="btn btn-secondary">Volver a Usuarios</a>
+    </div>
+</div>
+
+{{#if pedidos.length}}
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {{#each pedidos}}
+    <div class="col">
+        <div class="card bg-dark border-secondary h-100">
+            <div class="card-body">
+                <h5 class="card-title">Pedido #{{this.id}}</h5>
+                <p class="card-text">
+                    <strong>Producto:</strong> {{this.producto}}<br>
+                    <strong>Cantidad:</strong> {{this.cantidad}}<br>
+                    <strong>Fecha:</strong> {{this.createdAt}}
+                </p>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>
+{{else}}
+<div class="alert alert-info">
+    <h4 class="alert-heading">No hay pedidos</h4>
+    <p>Este usuario aún no tiene pedidos registrados.</p>
+</div>
+{{/if}}
