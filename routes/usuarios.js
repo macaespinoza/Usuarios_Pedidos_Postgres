@@ -8,9 +8,12 @@ router.get('/', async (req, res) => {
   try {
     const usuarios = await Usuario.findAll()
     const usuariosJSON = usuarios.map(u => u.toJSON())
+    console.log('Usuarios encontrados:', usuariosJSON.length)
+    console.log('Datos de usuarios:', JSON.stringify(usuariosJSON, null, 2))
     res.render('usuarios/index', { usuarios: usuariosJSON })
   } catch (error) {
-    res.status(500).send('Error al cargar usuarios')
+    console.error('Error al cargar usuarios:', error)
+    res.status(500).send('Error al cargar usuarios: ' + error.message)
   }
 })
 

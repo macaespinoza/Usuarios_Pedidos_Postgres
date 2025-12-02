@@ -10,6 +10,7 @@
     </div>
 </div>
 
+{{#if usuarios}}
 {{#if usuarios.length}}
 <div class="table-responsive">
     <table class="table table-dark table-striped table-hover">
@@ -25,14 +26,14 @@
         <tbody>
             {{#each usuarios}}
             <tr>
-                <td>{{this.id}}</td>
-                <td>{{this.nombre}}</td>
-                <td>{{this.email}}</td>
-                <td>{{this.createdAt}}</td>
+                <td>{{id}}</td>
+                <td>{{nombre}}</td>
+                <td>{{email}}</td>
+                <td>{{createdAt}}</td>
                 <td>
-                    <a href="/usuarios/{{this.id}}/pedidos" class="btn btn-sm btn-info">Ver Pedidos</a>
-                    <button class="btn btn-sm btn-warning" onclick="editarUsuario({{this.id}})">Editar</button>
-                    <button class="btn btn-sm btn-danger" onclick="eliminarUsuario({{this.id}})">Eliminar</button>
+                    <a href="/usuarios/{{id}}/pedidos" class="btn btn-sm btn-info">Ver Pedidos</a>
+                    <button class="btn btn-sm btn-warning" onclick="editarUsuario({{id}})">Editar</button>
+                    <button class="btn btn-sm btn-danger" onclick="eliminarUsuario({{id}})">Eliminar</button>
                 </td>
             </tr>
             {{/each}}
@@ -43,6 +44,12 @@
 <div class="alert alert-info">
     <h4 class="alert-heading">No hay usuarios registrados</h4>
     <p>Comienza agregando un nuevo usuario usando el botón "Nuevo Usuario".</p>
+</div>
+{{/if}}
+{{else}}
+<div class="alert alert-warning">
+    <h4 class="alert-heading">Error al cargar datos</h4>
+    <p>No se pudieron cargar los usuarios. Por favor, recarga la página.</p>
 </div>
 {{/if}}
 
