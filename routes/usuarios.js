@@ -7,7 +7,6 @@ const { Usuario, Pedido } = require('../models')
 router.get('/', async (req, res) => {
   try {
     const usuarios = await Usuario.findAll()
-    // Convertir objetos Sequelize a JSON plano
     const usuariosJSON = usuarios.map(u => u.toJSON())
     res.render('usuarios/index', { usuarios: usuariosJSON })
   } catch (error) {
