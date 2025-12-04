@@ -1,3 +1,7 @@
+// BOOTCAMP FULL STACK JAVASCRIPT 0080
+// MÓDULO 07 - Evaluación de Portafolio
+// Alumna: Macarena Espinoza Gatica
+
 const express = require('express')
 const { engine } = require('express-handlebars')
 const path = require('path')
