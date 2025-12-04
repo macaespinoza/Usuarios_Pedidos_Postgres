@@ -1,3 +1,8 @@
+# BOOTCAMP FULL STACK JAVASCRIPT 0080
+# MÓDULO 07 - Evaluación de Portafolio
+## Alumna: Macarena Espinoza Gatica
+========================================================
+
 # Tienda Online - Sistema de Gestión
 
 Aplicación web para gestionar usuarios y pedidos con Node.js, Express, PostgreSQL y Handlebars.
@@ -52,15 +57,15 @@ npm start
 │   └── pedidos.js          # Rutas pedidos
 ├── views/
 │   ├── layouts/
-│   │   └── main.handlebars # Layout principal
+│   │   └── main.handlebars      # Layout principal
 │   ├── usuarios/
-│   │   ├── index.handlebars
-│   │   └── pedidos.handlebars
+│   │   ├── index.handlebars     # Lista de usuarios
+│   │   └── pedidos.handlebars   # Pedidos de un usuario
 │   ├── pedidos/
-│   │   └── index.handlebars
-│   └── home.handlebars
-├── index.js                # Servidor principal
-└── database.sql            # Script BD
+│   │   └── index.handlebars     # Lista de pedidos
+│   └── home.handlebars          # Página principal
+├── index.js                     # Servidor principal
+└── database.sql                 # Script BD
 ```
 
 ## Rutas
