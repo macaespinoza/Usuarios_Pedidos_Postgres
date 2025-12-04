@@ -32,7 +32,8 @@
                 <td>{{createdAt}}</td>
                 <td>
                     <a href="/usuarios/{{id}}/pedidos" class="btn btn-sm btn-info">Ver Pedidos</a>
-                    <button class="btn btn-sm btn-warning" onclick="editarUsuario({{id}})">Editar</button>
+                    <button class="btn btn-sm btn-warning"
+                        onclick="editarUsuario({{id}}, '{{nombre}}', '{{email}}')">Editar</button>
                     <button class="btn btn-sm btn-danger" onclick="eliminarUsuario({{id}})">Eliminar</button>
                 </td>
             </tr>
@@ -48,8 +49,8 @@
 {{/if}}
 {{else}}
 <div class="alert alert-warning">
-    <h4 class="alert-heading">Error al cargar datos</h4>
-    <p>No se pudieron cargar los usuarios. Por favor, recarga la página.</p>
+    <h4 class="alert-heading">No se encontraron datos</h4>
+    <p>No se pudieron cargar los usuarios o la lista está vacía.</p>
 </div>
 {{/if}}
 
@@ -72,8 +73,8 @@
                         <input type="email" class="form-control" id="email" required>
                     </div>
                     <div class="mb-3">
-                        <label for="contraseña" class="form-label">Contraseña</label>
-                        <input type="password" class="form-control" id="contraseña" required>
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="password" required>
                     </div>
                 </form>
             </div>
@@ -85,23 +86,97 @@
     </div>
 </div>
 
+<!-- Modal Editar Usuario -->
+<div class="modal fade" id="editarUsuarioModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Usuario</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarUsuario">
+                    <input type="hidden" id="editId">
+                    <div class="mb-3">
+                        <label for="editNombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="editNombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="editEmail" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editPassword" class="form-label">Contraseña (dejar vacío para mantener la
+                            actual)</label>
+                        <input type="password" class="form-control" id="editPassword">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="actualizarUsuario()">Actualizar Usuario</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     async function crearUsuario() {
         const nombre = document.getElementById('nombre').value;
         const email = document.getElementById('email').value;
-        const contraseña = document.getElementById('contraseña').value;
+        const password = document.getElementById('password').value;
 
         try {
             const response = await fetch('/usuarios/api', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ nombre, email, contraseña })
+                body: JSON.stringify({ nombre, email, password })
             });
 
             if (response.ok) {
                 location.reload();
             } else {
-                alert('Error al crear usuario');
+                const data = await response.json();
+                alert('Error al crear usuario: ' + (data.error || 'Error desconocido'));
+            }
+        } catch (error) {
+            alert('Error: ' + error.message);
+        }
+    }
+
+    function editarUsuario(id, nombre, email) {
+        document.getElementById('editId').value = id;
+        document.getElementById('editNombre').value = nombre;
+        document.getElementById('editEmail').value = email;
+        document.getElementById('editPassword').value = '';
+
+        const modal = new bootstrap.Modal(document.getElementById('editarUsuarioModal'));
+        modal.show();
+    }
+
+    async function actualizarUsuario() {
+        const id = document.getElementById('editId').value;
+        const nombre = document.getElementById('editNombre').value;
+        const email = document.getElementById('editEmail').value;
+        const password = document.getElementById('editPassword').value;
+
+        const body = { nombre, email };
+        if (password) {
+            body.password = password;
+        }
+
+        try {
+            const response = await fetch(`/usuarios/api/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+
+            if (response.ok) {
+                location.reload();
+            } else {
+                const data = await response.json();
+                alert('Error al actualizar usuario: ' + (data.error || 'Error desconocido'));
             }
         } catch (error) {
             alert('Error: ' + error.message);

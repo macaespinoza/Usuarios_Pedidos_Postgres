@@ -1,18 +1,14 @@
--- Crear la base de datos
 CREATE DATABASE tienda_online;
 
--- Conectar a la base de datos
 \c tienda_online
 
--- Tabla de usuarios
 CREATE TABLE usuarios (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    contraseña VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL
 );
 
--- Tabla de pedidos
 CREATE TABLE pedidos (
     id SERIAL PRIMARY KEY,
     usuario_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
@@ -21,8 +17,8 @@ CREATE TABLE pedidos (
     fecha_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Datos de prueba
-INSERT INTO usuarios (nombre, email, contraseña) VALUES
+-- DATOS DE PRUEBA
+INSERT INTO usuarios (nombre, email, password) VALUES
 ('Macarena Espinoza', 'macarena@email.com', 'password123'),
 ('Anyeli Mantilla', 'anyeli@email.com', 'password456'),
 ('Juan Oh', 'juan@email.com', 'password789');

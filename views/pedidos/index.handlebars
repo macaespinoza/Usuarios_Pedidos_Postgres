@@ -55,16 +55,23 @@
             <div class="modal-body">
                 <form id="formNuevoPedido">
                     <div class="mb-3">
-                        <label for="usuario_id" class="form-label">Usuario ID</label>
-                        <input type="number" class="form-control" id="usuario_id" required>
+                        <label for="usuario_id" class="form-label">Usuario</label>
+                        <select class="form-select" id="usuario_id" required>
+                            <option value="">Selecciona un usuario</option>
+                            {{#each usuarios}}
+                            <option value="{{this.id}}">{{this.nombre}} ({{this.email}})</option>
+                            {{/each}}
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="producto" class="form-label">Producto</label>
-                        <input type="text" class="form-control" id="producto" required>
+                        <input type="text" class="form-control" id="producto"
+                            placeholder="Ej: Laptop HP, Mouse inalámbrico, Teclado mecánico" required>
+                        <div class="form-text">Ingresa el nombre o descripción del producto</div>
                     </div>
                     <div class="mb-3">
                         <label for="cantidad" class="form-label">Cantidad</label>
-                        <input type="number" class="form-control" id="cantidad" required>
+                        <input type="number" class="form-control" id="cantidad" min="1" value="1" required>
                     </div>
                 </form>
             </div>
@@ -81,6 +88,11 @@
         const usuario_id = document.getElementById('usuario_id').value;
         const producto = document.getElementById('producto').value;
         const cantidad = document.getElementById('cantidad').value;
+
+        if (!usuario_id) {
+            alert('Por favor selecciona un usuario');
+            return;
+        }
 
         try {
             const response = await fetch('/pedidos/api', {
